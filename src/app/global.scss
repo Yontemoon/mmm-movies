@@ -6,3 +6,14 @@ body {
   background-color: $primary-color;
   color: $text-color;
 }
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin border {
+  border: solid 2px black;
+  border-radius: 10px;
+}

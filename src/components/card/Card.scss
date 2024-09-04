@@ -3,6 +3,6 @@
 .card-wrapper {
   background-color: $secondary-color;
   padding: 2rem bg;
-  border-radius: 5px;
-  border: 2px solid black;
+  @include border();
+  @include flexCenter();
 }
