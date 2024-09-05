@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import josefin_sans from "@/utils/fonts";
 import "@/app/global.scss";
+import Header from "@/components/header/Header";
+import ReactQueryProvider from "@/context/ReactQueryProvider";
+import UserMoviesProvider from "@/context/UserMoviesProvider";
 
 export const metadata: Metadata = {
   title: "MMM...Movies",
@@ -14,7 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={josefin_sans.className}>{children}</body>
+      <ReactQueryProvider>
+        <UserMoviesProvider>
+          <body className={josefin_sans.className}>
+            <Header />
+            {children}
+          </body>
+        </UserMoviesProvider>
+      </ReactQueryProvider>
     </html>
   );
 }
