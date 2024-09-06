@@ -1,0 +1,40 @@
+@import "@/app/global.scss";
+
+.poster-wrapper {
+  @include border();
+  width: 200px;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+
+  &:hover {
+    cursor: pointer;
+    // filter: brightness(70%);
+    @include transition();
+  }
+
+  .poster-info {
+    box-sizing: border-box;
+    display: inline-block;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    // visibility: hidden;
+    height: 100px;
+    background-color: $primary-color;
+    z-index: 10;
+    width: calc(100% - 20px);
+    @include border();
+    @include transition();
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  &:hover .poster-info {
+    opacity: 1; // Fully visible
+    transform: translate(-50%, -50%) scale(1); // Full size when visible
+  }
+}

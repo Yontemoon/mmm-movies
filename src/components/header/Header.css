@@ -1,0 +1,7 @@
+.header-wrapper {
+  width: 100%;
+  border-bottom: solid black 2px;
+  min-height: 5rem;
+  display: flex;
+  justify-content: space-between;
+}/*# sourceMappingURL=Header.css.map */
