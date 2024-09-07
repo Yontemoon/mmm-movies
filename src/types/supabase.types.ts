@@ -1,141 +1,146 @@
-
 export type Json =
   | string
   | number
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
+  | Json[];
+
+export type TWatchlist = Tables<"watchlist">;
 
 export type Database = {
   public: {
     Tables: {
       movies: {
         Row: {
-          backdrop_path: string
-          genre_ids: number[] | null
-          movie_id: number
-          original_language: string | null
-          overview: string | null
-          popularity: number | null
-          poster_path: string | null
-          release_date: string | null
-          supabase_id: number
-          title: string | null
-          video: boolean | null
-          vote_average: number | null
-          vote_count: number | null
-        }
+          backdrop_path: string;
+          genre_ids: number[] | null;
+          movie_id: number;
+          original_language: string | null;
+          overview: string | null;
+          popularity: number | null;
+          poster_path: string | null;
+          release_date: string | null;
+          supabase_id: number;
+          title: string | null;
+          video: boolean | null;
+          vote_average: number | null;
+          vote_count: number | null;
+        };
         Insert: {
-          backdrop_path: string
-          genre_ids?: number[] | null
-          movie_id: number
-          original_language?: string | null
-          overview?: string | null
-          popularity?: number | null
-          poster_path?: string | null
-          release_date?: string | null
-          supabase_id?: number
-          title?: string | null
-          video?: boolean | null
-          vote_average?: number | null
-          vote_count?: number | null
-        }
+          backdrop_path: string;
+          genre_ids?: number[] | null;
+          movie_id: number;
+          original_language?: string | null;
+          overview?: string | null;
+          popularity?: number | null;
+          poster_path?: string | null;
+          release_date?: string | null;
+          supabase_id?: number;
+          title?: string | null;
+          video?: boolean | null;
+          vote_average?: number | null;
+          vote_count?: number | null;
+        };
         Update: {
-          backdrop_path?: string
-          genre_ids?: number[] | null
-          movie_id?: number
-          original_language?: string | null
-          overview?: string | null
-          popularity?: number | null
-          poster_path?: string | null
-          release_date?: string | null
-          supabase_id?: number
-          title?: string | null
-          video?: boolean | null
-          vote_average?: number | null
-          vote_count?: number | null
-        }
-        Relationships: []
-      }
+          backdrop_path?: string;
+          genre_ids?: number[] | null;
+          movie_id?: number;
+          original_language?: string | null;
+          overview?: string | null;
+          popularity?: number | null;
+          poster_path?: string | null;
+          release_date?: string | null;
+          supabase_id?: number;
+          title?: string | null;
+          video?: boolean | null;
+          vote_average?: number | null;
+          vote_count?: number | null;
+        };
+        Relationships: [];
+      };
       watchlist: {
         Row: {
-          created_at: string
-          id: number
-          movie_id: number | null
-          user_id: string | null
-        }
+          created_at: string;
+          id: number;
+          movie_id: number | null;
+          user_id: string | null;
+        };
         Insert: {
-          created_at?: string
-          id?: number
-          movie_id?: number | null
-          user_id?: string | null
-        }
+          created_at?: string;
+          id?: number;
+          movie_id?: number | null;
+          user_id?: string | null;
+        };
         Update: {
-          created_at?: string
-          id?: number
-          movie_id?: number | null
-          user_id?: string | null
-        }
+          created_at?: string;
+          id?: number;
+          movie_id?: number | null;
+          user_id?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "watchlist_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "movies"
-            referencedColumns: ["movie_id"]
+            foreignKeyName: "watchlist_movie_id_fkey";
+            columns: ["movie_id"];
+            isOneToOne: false;
+            referencedRelation: "movies";
+            referencedColumns: ["movie_id"];
           },
           {
-            foreignKeyName: "watchlist_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "watchlist_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
-        ]
-      }
-    }
+        ];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export type Tables<
   PublicTableNameOrOptions extends
     | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    ? keyof (
+      & Database[PublicTableNameOrOptions["schema"]]["Tables"]
+      & Database[PublicTableNameOrOptions["schema"]]["Views"]
+    )
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
-    }
-    ? R
+> = PublicTableNameOrOptions extends { schema: keyof Database } ? (
+    & Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    & Database[PublicTableNameOrOptions["schema"]]["Views"]
+  )[TableName] extends {
+    Row: infer R;
+  } ? R
+  : never
+  : PublicTableNameOrOptions extends keyof (
+    & PublicSchema["Tables"]
+    & PublicSchema["Views"]
+  ) ? (
+      & PublicSchema["Tables"]
+      & PublicSchema["Views"]
+    )[PublicTableNameOrOptions] extends {
+      Row: infer R;
+    } ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
-    : never
+  : never;
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -146,17 +151,15 @@ export type TablesInsert<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
+    Insert: infer I;
+  } ? I
+  : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
+      Insert: infer I;
+    } ? I
     : never
+  : never;
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -167,17 +170,15 @@ export type TablesUpdate<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
-    }
-    ? U
-    : never
+    Update: infer U;
+  } ? U
+  : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
+      Update: infer U;
+    } ? U
     : never
+  : never;
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -190,4 +191,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+  : never;

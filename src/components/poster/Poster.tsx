@@ -1,12 +1,13 @@
 import "./Poster.scss";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Button from "../button/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMovie } from "@/types/tmdb.types";
-import { supabase } from "@/utils/supabase/client";
-import insertMovie from "@/query/insertMovie";
 import { useUserMovies } from "@/context/UserMoviesProvider";
+import { Tables } from "@/types/supabase.types";
+import updateWatchlist from "@/query/updateWatchlist";
+import { checkIsInWatchlist } from "@/utils/helper";
 
 type PropTypes = {
   movie: TMovie;
@@ -14,53 +15,50 @@ type PropTypes = {
 
 const Poster = ({ movie }: PropTypes) => {
   const [hovered, setHovered] = useState(false);
+
   const toggleHover = () => setHovered(!hovered);
   const queryClient = useQueryClient();
   const movies = useUserMovies();
-  const addToWatchlist = async (movieId: number) => {
-    const userId = await supabase.auth
-      .getUser()
-      .then((response) => response.data.user?.id);
-    if (userId) {
-      // CHCKEC AND CREATE A MOVIE ROW IF NOT PRESENT:
 
-      const checkMovieIsPresent = await insertMovie(movie);
-      if (checkMovieIsPresent) {
-        const { data: isInWatchlist, error } = await supabase
-          .from("watchlist")
-          .select()
-          .eq("user_id", userId)
-          .eq("movie_id", movieId);
-
-        if (isInWatchlist && isInWatchlist.length === 0) {
-          const { data } = await supabase.from("watchlist").insert({
-            user_id: userId,
-            movie_id: movieId,
-          });
-        } else {
-          const { data } = await supabase
-            .from("watchlist")
-            .delete()
-            .eq("user_id", userId)
-            .eq("movie_id", movieId);
-        }
-        if (error) throw new Error(error.message);
-        return isInWatchlist;
-      } else {
-      }
-    }
-  };
+  // const isInWatchlist = () => {
+  //   if (Array.isArray(movies)) {
+  //     const isIn = movies.some((m) => m.movie_id === movie.id);
+  //     if (isIn) return true;
+  //     return false;
+  //   }
+  // };
 
   const mutation = useMutation({
-    mutationFn: async (movieId: number) => await addToWatchlist(movieId),
-    onSuccess: () => {
+    mutationFn: updateWatchlist,
+    onMutate: async (movie) => {
+      await queryClient.cancelQueries({ queryKey: ["watchlist"] });
+      const prevWatchlist = queryClient.getQueryData(["watchlist"]);
+      const movieId = movie.id;
+      queryClient.setQueryData(
+        ["watchlist"],
+        (oldWatchlist: Tables<"watchlist">[]) => {
+          const isMovieInWatchlist = oldWatchlist.some(
+            (m) => m.movie_id === movieId
+          );
+          if (isMovieInWatchlist) {
+            return oldWatchlist.filter((m) => m.movie_id !== movieId);
+          } else {
+            return [...oldWatchlist, { ...movie, movie_id: movieId }];
+          }
+        }
+      );
+      return { prevWatchlist, movieId };
+    },
+    onError: (error, movieId, context) => {
+      if (error) {
+        throw new Error(error.message);
+      }
+      queryClient.setQueryData(["watchlist"], context?.prevWatchlist);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["watchlist"] });
     },
   });
-
-  const handleAddToWatchlist = () => {
-    mutation.mutate(movie.id);
-  };
 
   return (
     <>
@@ -77,9 +75,11 @@ const Poster = ({ movie }: PropTypes) => {
         />
         {hovered && (
           <div className="poster-info">
-            <Button onClick={handleAddToWatchlist}>
+            <Button onClick={() => mutation.mutate(movie)}>
               {mutation.isPending
-                ? "Adding to Watchlist..."
+                ? "Processing..."
+                : movies && checkIsInWatchlist(movies, movie.id)
+                ? "Remove to watchlist"
                 : "Add to watchlist"}
             </Button>
           </div>

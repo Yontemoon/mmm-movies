@@ -2,20 +2,21 @@ import { supabase } from "@/utils/supabase/client";
 
 const getWatchlist = async () => {
   try {
-    const { data: userId } = await supabase.auth.getUser();
-    console.log(userId.user);
-    const { data: watchlist, error: watchlistError } = await supabase.from(
-      "watchlist",
-    ).select("*").eq(
-      "user_id",
-      userId.user.id,
-    );
+    const { data: user } = await supabase.auth.getUser();
+    if (user.user && user.user.id) {
+      const { data: watchlist, error: watchlistError } = await supabase.from(
+        "watchlist",
+      ).select("*").eq(
+        "user_id",
+        user.user.id,
+      );
 
-    if (watchlistError) {
-      throw new Error(watchlistError.message);
+      if (watchlistError) {
+        throw new Error(watchlistError.message);
+      }
+
+      return watchlist;
     }
-
-    return watchlist;
   } catch (error) {
     console.error(error);
     return;

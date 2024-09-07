@@ -3,8 +3,10 @@
 import { useContext, createContext, useMemo } from "react";
 import useUserList from "@/hooks/useUserLists";
 import { TMovie } from "@/types/tmdb.types";
+import { Database } from "@/types/supabase.types";
+import { TWatchlist } from "@/types/supabase.types";
 
-const MovieContext = createContext<TMovie[] | null>(null);
+const MovieContext = createContext<TWatchlist[] | null>(null);
 
 export const useUserMovies = () => {
   return useContext(MovieContext);

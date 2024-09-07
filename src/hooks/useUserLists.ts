@@ -3,7 +3,7 @@ import getWatchlist from "@/query/getWatchlist";
 
 const useUserList = () => {
   const userList = useQuery({
-    queryKey: ["watchlist", "rating", "favorites"],
+    queryKey: ["watchlist"],
     queryFn: () => getWatchlist(),
   });
 
