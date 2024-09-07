@@ -2,11 +2,11 @@ import "./Poster.scss";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import Button from "../button/Button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMovie } from "@/types/tmdb.types";
-
 import { supabase } from "@/utils/supabase/client";
 import insertMovie from "@/query/insertMovie";
+import { useUserMovies } from "@/context/UserMoviesProvider";
 
 type PropTypes = {
   movie: TMovie;
@@ -15,7 +15,8 @@ type PropTypes = {
 const Poster = ({ movie }: PropTypes) => {
   const [hovered, setHovered] = useState(false);
   const toggleHover = () => setHovered(!hovered);
-
+  const queryClient = useQueryClient();
+  const movies = useUserMovies();
   const addToWatchlist = async (movieId: number) => {
     const userId = await supabase.auth
       .getUser()
@@ -45,12 +46,16 @@ const Poster = ({ movie }: PropTypes) => {
         }
         if (error) throw new Error(error.message);
         return isInWatchlist;
+      } else {
       }
     }
   };
 
   const mutation = useMutation({
     mutationFn: async (movieId: number) => await addToWatchlist(movieId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
+    },
   });
 
   const handleAddToWatchlist = () => {

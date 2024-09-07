@@ -1,8 +1,10 @@
 "use client";
 
-import { useContext, useState, createContext, useMemo } from "react";
+import { useContext, createContext, useMemo } from "react";
+import useUserList from "@/hooks/useUserLists";
+import { TMovie } from "@/types/tmdb.types";
 
-const MovieContext = createContext([]);
+const MovieContext = createContext<TMovie[] | null>(null);
 
 export const useUserMovies = () => {
   return useContext(MovieContext);
@@ -13,21 +15,16 @@ type PropTypes = {
 };
 
 const UserMoviesProvider = ({ children }: PropTypes) => {
-  const [watchlist, setWatchlist] = useState(null);
-  // const [favorites, setFavorites] = useState(null);
-  // const [rated, setRated] = useState(null);
+  const { data: movieLists, isLoading, isError } = useUserList();
 
-  const contextValue = useMemo(
-    () => ({
-      watchlist,
-      setWatchlist,
-      // favorites,
-      // setFavorites,
-      // rated,
-      // setRated,
-    }),
-    [watchlist, setWatchlist]
-  );
+  // Logging for debugging; this will log undefined until data is fetched successfully.
+
+  // Memoize the context value to avoid unnecessary re-renders
+  const contextValue = useMemo(() => movieLists || null, [movieLists]);
+
+  // Optionally handle loading or error states
+  // if (isLoading) return <div>Loading...</div>;
+  // if (isError) return <div>Error loading movies.</div>;
 
   return (
     <MovieContext.Provider value={contextValue}>
