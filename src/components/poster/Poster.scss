@@ -22,19 +22,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    // visibility: hidden;
-    height: 100px;
+
+    height: 75px;
     background-color: $primary-color;
     z-index: 10;
     width: calc(100% - 20px);
     @include border();
-    @include transition();
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  &:hover .poster-info {
-    opacity: 1; // Fully visible
-    transform: translate(-50%, -50%) scale(1); // Full size when visible
+    // @include transition();
+    transition: all;
+    transition-duration: 500ms;
   }
 }

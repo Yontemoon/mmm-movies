@@ -26,7 +26,7 @@ const Popular = () => {
       {movies &&
         movies.map((movie) => (
           <div key={movie.id}>
-            <Poster posterId={movie.poster_path} movieTitle={movie.title} />
+            <Poster movie={movie}/>
             <h2>{movie.title}</h2>
           </div>
         ))}
