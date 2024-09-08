@@ -3,36 +3,51 @@ import { supabase } from "@/utils/supabase/client";
 import insertMovie from "./insertMovie";
 
 const updateWatchlist = async (movieInfo: TMovie) => {
-  const userId = await supabase.auth
-    .getUser()
-    .then((response) => response.data.user?.id);
-  const movieId = movieInfo.id;
-  if (userId) {
-    const checkMovieIsPresent = await insertMovie(movieInfo);
-    if (checkMovieIsPresent) {
-      const { data: isInWatchlist, error } = await supabase
+  try {
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError) throw Error(authError.message);
+
+    const userId = authData.user?.id;
+    if (!userId) {
+      // Handle the case where the user is not authenticated
+      // TODO: Handle when user is not authenticated
+      return;
+    }
+
+    // Check if the movie is already present
+    const isMoviePresent = await insertMovie(movieInfo);
+    if (!isMoviePresent) return;
+
+    const movieId = movieInfo.id;
+
+    // Check if the movie is already in the user's watchlist
+    const { data: isInWatchlist, error: selectError } = await supabase
+      .from("watchlist")
+      .select()
+      .eq("user_id", userId)
+      .eq("movie_id", movieId);
+
+    if (selectError) throw Error(selectError.message);
+
+    if (isInWatchlist?.length === 0) {
+      const { error: insertError } = await supabase.from("watchlist").insert({
+        user_id: userId,
+        movie_id: movieId,
+      });
+      if (insertError) throw Error(insertError.message);
+    } else {
+      const { error: deleteError } = await supabase
         .from("watchlist")
-        .select()
+        .delete()
         .eq("user_id", userId)
         .eq("movie_id", movieId);
-
-      if (isInWatchlist && isInWatchlist.length === 0) {
-        const { data } = await supabase.from("watchlist").insert({
-          user_id: userId,
-          movie_id: movieId,
-        });
-      } else {
-        const { data } = await supabase
-          .from("watchlist")
-          .delete()
-          .eq("user_id", userId)
-          .eq("movie_id", movieId);
-      }
-      if (error) throw new Error(error.message);
-      return isInWatchlist;
+      if (deleteError) throw Error(deleteError.message);
     }
-  } else {
-    // TODO -- WHEN USER IS NOT AUTH
+
+    return isInWatchlist;
+  } catch (error) {
+    console.error("Error updating watchlist:", error);
+    throw error; // Propagate the error further if needed
   }
 };
 

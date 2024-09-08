@@ -1,7 +1,7 @@
-import { Tables } from "@/types/supabase.types";
+import { TSFavorites, TSRating, TSWatchlist } from "@/types/supabase.types";
 
 export const checkIsInWatchlist = (
-  moviesList: Tables<"watchlist">[],
+  moviesList: TSWatchlist[],
   movieId: number,
 ) => {
   if (Array.isArray(moviesList)) {
@@ -10,3 +10,17 @@ export const checkIsInWatchlist = (
     return false;
   }
 };
+
+export function isInList(
+  list: TSWatchlist[] | TSFavorites[] | TSRating[],
+  movieId: number,
+) {
+  if (Array.isArray(list)) {
+    const isInList = list.some((m) => m.movie_id === movieId);
+    if (isInList) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+}

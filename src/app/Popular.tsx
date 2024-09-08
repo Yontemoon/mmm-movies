@@ -2,7 +2,7 @@
 import { TMovie } from "@/types/tmdb.types";
 import styles from "./page.module.scss";
 import { useQuery } from "@tanstack/react-query";
-import { fetchTMDBData } from "./fetch/popularMovies";
+import { fetchTMDBData } from "../fetch/popularMovies";
 import Poster from "@/components/poster/Poster";
 
 const Popular = () => {
@@ -26,7 +26,7 @@ const Popular = () => {
       {movies &&
         movies.map((movie) => (
           <div key={movie.id}>
-            <Poster movie={movie}/>
+            <Poster movie={movie} />
             <h2>{movie.title}</h2>
           </div>
         ))}

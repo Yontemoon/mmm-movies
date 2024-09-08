@@ -1,21 +1,21 @@
 import { supabase } from "@/utils/supabase/client";
 
-const getWatchlist = async () => {
+const getFavorite = async () => {
   try {
     const { data: user } = await supabase.auth.getUser();
     if (user.user && user.user.id) {
-      const { data: watchlist, error: watchlistError } = await supabase.from(
-        "watchlist",
+      const { data: favorite, error: favError } = await supabase.from(
+        "favorites",
       ).select("*").eq(
         "user_id",
         user.user.id,
       );
 
-      if (watchlistError) {
-        throw Error(watchlistError.message);
+      if (favError) {
+        throw Error(favError.message);
       }
 
-      return watchlist;
+      return favorite;
     }
   } catch (error) {
     console.error(error);
@@ -23,4 +23,4 @@ const getWatchlist = async () => {
   }
 };
 
-export default getWatchlist;
+export default getFavorite;
