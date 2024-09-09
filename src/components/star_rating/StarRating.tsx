@@ -30,7 +30,7 @@ const StarRating = ({ startRating, movie }: PropTypes) => {
           const isMovieInRating = oldRating?.some(
             (m) => m.movie_id === movieId
           );
-          console.log(isMovieInRating);
+
           if (isMovieInRating) {
             return oldRating?.map((m: TSRating) =>
               m.movie_id === movieId

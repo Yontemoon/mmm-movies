@@ -1,6 +1,6 @@
 import "./Poster.scss";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "../button/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMovie } from "@/types/tmdb.types";
@@ -10,6 +10,7 @@ import updateWatchlist from "@/query/updateWatchlist";
 import { isInList } from "@/utils/helper";
 import updateFavorite from "@/query/updateFavorite";
 import StarRating from "../star_rating/StarRating";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
 
 type PropTypes = {
   movie: TMovie;
@@ -19,17 +20,24 @@ const Poster = ({ movie }: PropTypes) => {
   const [hovered, setHovered] = useState(false);
   const [showStars, setShowStar] = useState<boolean>(false);
 
-  const toggleHover = () => {
-    setHovered(!hovered);
-    if (showStars) {
-      setShowStar(false);
-    }
+  const handleMouseEnter = () => setHovered(true);
+  const handleMouseLeave = () => {
+    if (!showStars) setHovered(false);
   };
+
+  const wrapperRef = useRef(null);
   const queryClient = useQueryClient();
   const movies = useUserMovies();
   const currRating = movies?.rating?.find(
     (m) => m.movie_id === movie.id
   )?.rating_number;
+
+  useOnClickOutside(wrapperRef, () => {
+    if (showStars && hovered) {
+      setHovered(false);
+      setShowStar(false);
+    }
+  });
 
   // console.log(currRating);
 
@@ -95,8 +103,9 @@ const Poster = ({ movie }: PropTypes) => {
     <>
       <div
         className="poster-wrapper"
-        onMouseEnter={toggleHover}
-        onMouseLeave={toggleHover}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        ref={wrapperRef}
       >
         <Image
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -104,7 +113,7 @@ const Poster = ({ movie }: PropTypes) => {
           width={200}
           height={300}
         />
-        {hovered && (
+        {(hovered || showStars) && (
           <div className="hover-info">
             <Button onClick={() => watchlistMutation.mutate(movie)}>
               {watchlistMutation.isPending
@@ -113,7 +122,6 @@ const Poster = ({ movie }: PropTypes) => {
                 ? "Remove to watchlist"
                 : "Add to watchlist"}
             </Button>
-            {/* TODO -- FAVORITES CHANGES */}
             <Button onClick={() => favoriteMutation.mutate(movie)}>
               {favoriteMutation.isPending
                 ? "Processing..."
