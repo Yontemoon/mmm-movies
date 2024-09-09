@@ -47,7 +47,7 @@ const updateWatchlist = async (movieInfo: TMovie) => {
     return isInWatchlist;
   } catch (error) {
     console.error("Error updating watchlist:", error);
-    throw error; // Propagate the error further if needed
+    throw error;
   }
 };
 

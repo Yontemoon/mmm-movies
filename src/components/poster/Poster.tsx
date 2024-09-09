@@ -7,8 +7,9 @@ import { TMovie } from "@/types/tmdb.types";
 import { useUserMovies } from "@/context/UserMoviesProvider";
 import { TSFavorites, TSWatchlist } from "@/types/supabase.types";
 import updateWatchlist from "@/query/updateWatchlist";
-import { checkIsInWatchlist } from "@/utils/helper";
+import { isInList } from "@/utils/helper";
 import updateFavorite from "@/query/updateFavorite";
+import StarRating from "../star_rating/StarRating";
 
 type PropTypes = {
   movie: TMovie;
@@ -16,11 +17,22 @@ type PropTypes = {
 
 const Poster = ({ movie }: PropTypes) => {
   const [hovered, setHovered] = useState(false);
+  const [showStars, setShowStar] = useState<boolean>(false);
 
-  const toggleHover = () => setHovered(!hovered);
+  const toggleHover = () => {
+    setHovered(!hovered);
+    if (showStars) {
+      setShowStar(false);
+    }
+  };
   const queryClient = useQueryClient();
   const movies = useUserMovies();
-  console.log(movies);
+  const currRating = movies?.rating?.find(
+    (m) => m.movie_id === movie.id
+  )?.rating_number;
+
+  // console.log(currRating);
+
   const watchlistMutation = useMutation({
     mutationFn: updateWatchlist,
     onMutate: async (movie) => {
@@ -39,7 +51,7 @@ const Poster = ({ movie }: PropTypes) => {
       });
       return { prevWatchlist, movieId };
     },
-    onError: (error, movieId, context) => {
+    onError: (error, _movieId, context) => {
       if (error) {
         throw Error(error.message);
       }
@@ -53,10 +65,10 @@ const Poster = ({ movie }: PropTypes) => {
   const favoriteMutation = useMutation({
     mutationFn: updateFavorite,
     onMutate: async (movie) => {
-      await queryClient.cancelQueries({ queryKey: ["favorites"] });
-      const prevFavorite = queryClient.getQueryData(["favorites"]);
+      await queryClient.cancelQueries({ queryKey: ["favorite"] });
+      const prevFavorite = queryClient.getQueryData(["favorite"]);
       const movieId = movie.id;
-      queryClient.setQueryData(["favorites"], (oldFavorite: TSFavorites[]) => {
+      queryClient.setQueryData(["favorite"], (oldFavorite: TSFavorites[]) => {
         const isMovieInFavorite = oldFavorite.some(
           (m) => m.movie_id === movieId
         );
@@ -68,20 +80,15 @@ const Poster = ({ movie }: PropTypes) => {
       });
       return { prevFavorite, movieId };
     },
-    onError: (error, movieId, context) => {
+    onError: (error, _movieId, context) => {
       if (error) {
         throw Error(error.message);
       }
-      queryClient.setQueryData(["watchlist"], context?.prevFavorite);
+      queryClient.setQueryData(["favorite"], context?.prevFavorite);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["favorite"] });
     },
-    // onMutate: (movie) => {},
-    // onError: (error, movie, context) => {
-    //   if (error) throw Error(error.message);
-    // },
-    // onSettled: () => {},
   });
 
   return (
@@ -102,15 +109,22 @@ const Poster = ({ movie }: PropTypes) => {
             <Button onClick={() => watchlistMutation.mutate(movie)}>
               {watchlistMutation.isPending
                 ? "Processing..."
-                : movies?.watchlist &&
-                  checkIsInWatchlist(movies?.watchlist, movie.id)
+                : movies?.watchlist && isInList(movies?.watchlist, movie.id)
                 ? "Remove to watchlist"
                 : "Add to watchlist"}
             </Button>
             {/* TODO -- FAVORITES CHANGES */}
             <Button onClick={() => favoriteMutation.mutate(movie)}>
-              Favorites
+              {favoriteMutation.isPending
+                ? "Processing..."
+                : movies?.favorites && isInList(movies.favorites, movie.id)
+                ? "Remove from Favs"
+                : "Add to Favs"}
             </Button>
+            <Button onClick={() => setShowStar(!showStars)}>Rate me!</Button>
+            {showStars && (
+              <StarRating startRating={currRating || 0} movie={movie} />
+            )}
           </div>
         )}
       </div>
