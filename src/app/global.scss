@@ -1,4 +1,5 @@
-$primary-color: rgb(30, 30, 36);
+$primary-background-color: rgb(30, 30, 36);
+$secondary-background-color: rgb(41, 41, 46);
 $secondary-color: rgb(163, 0, 0);
 $third-color: rgb(255, 119, 0);
 $fourth-color: rgb(0, 175, 181);
@@ -10,7 +11,7 @@ $h3-size: 1.75rem;
 $h4-size: 1.5rem;
 
 body {
-  background-color: $primary-color;
+  background-color: $primary-background-color;
   color: $text-color;
 }
 
@@ -20,15 +21,23 @@ body {
   align-items: center;
 }
 
-@mixin border {
-  border: solid 2px black;
-  border-radius: 10px;
+@mixin border($color: $secondary-color) {
+  border-color: $color;
+  border-right: solid 5px $color;
+  border-bottom: solid 5px $color;
 }
 
 @mixin transition {
   animation-duration: 100ms;
   transition: all ease-in-out;
 }
+
+// @mixin setBgColorAndHover($baseColor) {
+//   background-color: $baseColor;
+//   &:hover {
+//     background-color: darken($baseColor, 5%);
+//   }
+// }
 
 h1 {
   font-size: $h1-size;

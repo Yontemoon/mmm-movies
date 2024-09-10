@@ -11,6 +11,10 @@ import { isInList } from "@/utils/helper";
 import updateFavorite from "@/query/updateFavorite";
 import StarRating from "../star_rating/StarRating";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
+import StarIcon from "../icons/Star";
+import HeartIcon from "../icons/Heart";
+import EyeIcon from "../icons/Eye";
+import clsx from "clsx";
 
 type PropTypes = {
   movie: TMovie;
@@ -28,6 +32,12 @@ const Poster = ({ movie }: PropTypes) => {
   const wrapperRef = useRef(null);
   const queryClient = useQueryClient();
   const movies = useUserMovies();
+  const isInWatchlist =
+    movies?.watchlist && isInList(movies?.watchlist, movie.id);
+  const isInFavorite =
+    movies?.favorites && isInList(movies?.favorites, movie.id);
+  const isInRated = movies?.rating && isInList(movies.rating, movie.id);
+
   const currRating = movies?.rating?.find(
     (m) => m.movie_id === movie.id
   )?.rating_number;
@@ -38,8 +48,6 @@ const Poster = ({ movie }: PropTypes) => {
       setShowStar(false);
     }
   });
-
-  // console.log(currRating);
 
   const watchlistMutation = useMutation({
     mutationFn: updateWatchlist,
@@ -102,7 +110,12 @@ const Poster = ({ movie }: PropTypes) => {
   return (
     <>
       <div
-        className="poster-wrapper"
+        className={clsx(
+          "poster-wrapper",
+          isInFavorite && "poster-favorite",
+          isInWatchlist && "poster-watchlist",
+          isInRated && "poster-rated"
+        )}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         ref={wrapperRef}
@@ -115,24 +128,44 @@ const Poster = ({ movie }: PropTypes) => {
         />
         {(hovered || showStars) && (
           <div className="hover-info">
-            <Button onClick={() => watchlistMutation.mutate(movie)}>
-              {watchlistMutation.isPending
-                ? "Processing..."
-                : movies?.watchlist && isInList(movies?.watchlist, movie.id)
-                ? "Remove to watchlist"
-                : "Add to watchlist"}
-            </Button>
-            <Button onClick={() => favoriteMutation.mutate(movie)}>
-              {favoriteMutation.isPending
-                ? "Processing..."
-                : movies?.favorites && isInList(movies.favorites, movie.id)
-                ? "Remove from Favs"
-                : "Add to Favs"}
-            </Button>
-            <Button onClick={() => setShowStar(!showStars)}>Rate me!</Button>
-            {showStars && (
-              <StarRating startRating={currRating || 0} movie={movie} />
-            )}
+            <div>
+              <Button
+                type="icon"
+                purpose="watchlist"
+                onClick={() => watchlistMutation.mutate(movie)}
+              >
+                {watchlistMutation.isPending ? (
+                  "Processing..."
+                ) : isInWatchlist ? (
+                  <EyeIcon />
+                ) : (
+                  <EyeIcon />
+                )}
+              </Button>
+              <Button
+                type="icon"
+                purpose="favorite"
+                onClick={() => favoriteMutation.mutate(movie)}
+              >
+                {favoriteMutation.isPending ? (
+                  "Processing..."
+                ) : isInFavorite ? (
+                  <HeartIcon />
+                ) : (
+                  <HeartIcon />
+                )}
+              </Button>
+              <Button
+                type="icon"
+                onClick={() => setShowStar(!showStars)}
+                purpose="rating"
+              >
+                <StarIcon />
+              </Button>
+              {showStars && (
+                <StarRating startRating={currRating || 0} movie={movie} />
+              )}
+            </div>
           </div>
         )}
       </div>

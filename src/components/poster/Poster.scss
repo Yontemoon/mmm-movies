@@ -1,13 +1,18 @@
 @import "@/app/global.scss";
 
 .poster-wrapper {
-  @include border();
   width: 200px;
   height: 300px;
   overflow: hidden;
   position: relative;
   z-index: 5;
-
+  @include border($secondary-color);
+  &.poster-favorite {
+    @include border($third-color);
+  }
+  &.poster-rated {
+    @include border($fourth-color);
+  }
   &:hover {
     cursor: pointer;
     // filter: brightness(70%);
@@ -24,12 +29,16 @@
     text-align: center;
 
     height: 75px;
-    background-color: $primary-color;
+    background-color: $primary-background-color;
     z-index: 10;
     width: calc(100% - 20px);
-    @include border();
-    // @include transition();
     transition: all;
     transition-duration: 500ms;
+
+    div {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1em;
+    }
   }
 }
