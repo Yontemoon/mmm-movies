@@ -10,11 +10,6 @@ $h2-size: 1rem;
 $h3-size: 1.75rem;
 $h4-size: 1.5rem;
 
-body {
-  background-color: $primary-background-color;
-  color: $text-color;
-}
-
 @mixin flexCenter {
   display: flex;
   justify-content: center;
@@ -31,6 +26,15 @@ body {
   animation-duration: 100ms;
   transition: all ease-in-out;
 }
+
+body {
+  background-color: $primary-background-color;
+  color: $text-color;
+}
+
+// main {
+//   @include flexCenter;
+// }
 
 // @mixin setBgColorAndHover($baseColor) {
 //   background-color: $baseColor;

@@ -15,6 +15,7 @@ import StarIcon from "../icons/Star";
 import HeartIcon from "../icons/Heart";
 import EyeIcon from "../icons/Eye";
 import clsx from "clsx";
+import Link from "next/link";
 
 type PropTypes = {
   movie: TMovie;
@@ -113,19 +114,25 @@ const Poster = ({ movie }: PropTypes) => {
         className={clsx(
           "poster-wrapper",
           isInFavorite && "poster-favorite",
-          isInWatchlist && "poster-watchlist",
-          isInRated && "poster-rated"
+          isInRated && "poster-rated",
+          isInWatchlist && "poster-watchlist"
         )}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         ref={wrapperRef}
       >
-        <Image
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          alt={movie.title}
-          width={200}
-          height={300}
-        />
+        <Link href={`/movie/${movie.id}`}>
+          <div>
+            <Image
+              unselectable="on"
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              width={200}
+              height={300}
+            />
+          </div>
+        </Link>
+
         {(hovered || showStars) && (
           <div className="hover-info">
             <div>

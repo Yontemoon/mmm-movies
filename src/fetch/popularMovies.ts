@@ -8,7 +8,7 @@ export const fetchTMDBData = async (endpoint: string) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error(`Failed to fetch TMDB Data at ${endpoint}`);
   }
 
   return response.json();

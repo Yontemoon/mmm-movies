@@ -14,13 +14,12 @@ export default async function Home() {
   }
 
   return (
-    <main>
+    <>
+      <section>
+        <h1>Welcome to mmm... movies,</h1>
+        <h2>A Website dedicated to tracking your movie</h2>
+      </section>
       <Popular />
-      <div>
-        <Button type="icon">
-          <StarIcon />
-        </Button>
-      </div>
-    </main>
+    </>
   );
 }

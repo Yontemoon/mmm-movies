@@ -1,5 +1,6 @@
 import "./Header.scss";
 import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
 
 const Header = async () => {
   const supabase = createClient();
@@ -8,7 +9,9 @@ const Header = async () => {
 
   return (
     <header className="header-wrapper">
-      <div>MMM...movies!</div>
+      <Link href="/">
+        <div>MMM...movies!</div>
+      </Link>
       <div>{user.user?.email || "Login"}</div>
     </header>
   );

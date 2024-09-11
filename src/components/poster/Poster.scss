@@ -6,16 +6,26 @@
   overflow: hidden;
   position: relative;
   z-index: 5;
-  @include border($secondary-color);
-  &.poster-favorite {
-    @include border($third-color);
+
+  img {
+    // user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
   }
+  @include border($secondary-color);
+
   &.poster-rated {
     @include border($fourth-color);
   }
+  &.poster-favorite {
+    @include border($third-color);
+  }
   &:hover {
     cursor: pointer;
-    // filter: brightness(70%);
     @include transition();
   }
 
@@ -23,7 +33,7 @@
     box-sizing: border-box;
     display: inline-block;
     position: absolute;
-    top: 50%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -36,9 +46,14 @@
     transition-duration: 500ms;
 
     div {
+      padding: 1em;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1em;
+
+      button {
+        z-index: 20;
+      }
     }
   }
 }

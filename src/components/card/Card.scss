@@ -1,8 +1,10 @@
 @import "@/app/global.scss";
 
 .card-wrapper {
-  background-color: $secondary-color;
-  padding: 2rem bg;
-  @include border();
-  @include flexCenter();
+  width: 100%;
+  height: 100%;
+  background-color: $secondary-background-color;
+  padding: 2rem;
+  margin: auto;
+  // @include flexCenter();
 }

@@ -21,7 +21,7 @@ export default function RootLayout({
         <UserMoviesProvider>
           <body className={josefin_sans.className}>
             <Header />
-            {children}
+            <main>{children}</main>
           </body>
         </UserMoviesProvider>
       </ReactQueryProvider>
