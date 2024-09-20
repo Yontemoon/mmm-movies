@@ -6,6 +6,7 @@ import { useQueries } from "@tanstack/react-query";
 import { fetchTMDBData } from "../fetch/popularMovies";
 import CarouselComp from "@/components/carousel/Carousel";
 import Loader from "@/components/loader/Loader";
+import { useToast } from "@/context/toast/ToastProvider";
 
 const movieQueries = [
   { key: "popularMovies", endpoint: "/movie/popular" },
@@ -14,6 +15,7 @@ const movieQueries = [
 ];
 
 const Popular = () => {
+  const { addToast } = useToast();
   const results = useQueries({
     queries: movieQueries.map(({ key, endpoint }) => ({
       queryKey: [key],
@@ -31,8 +33,13 @@ const Popular = () => {
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data.</div>;
 
+  const handleToast = () => {
+    addToast("Hello world");
+  };
+
   return (
     <section className={styles.popular_wrapper}>
+      <button onClick={handleToast}>click me</button>
       <h1>Popular</h1>
       <CarouselComp movies={popular.data} />
       <h1>Upcoming</h1>

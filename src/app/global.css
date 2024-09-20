@@ -3,6 +3,13 @@ body {
   color: rgb(242, 239, 233);
 }
 
+main {
+  max-width: 72.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
 h1 {
   font-size: 2.5rem;
   color: rgb(242, 239, 233);

@@ -1,0 +1,47 @@
+@import "@/app/global.scss";
+
+.toast-container {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+
+.toast {
+  background-color: #000; // Brutalist black background
+  color: #fff;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: 2px solid #fff; // Minimalist white border
+  border-radius: 0; // Sharp corners for a brutalist look
+  box-shadow: none; // No shadows, keeping it clean and raw
+  text-transform: uppercase;
+  animation: slideIn 0.3s ease-out, fadeOut 6s forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%); // Slide in from bottom
+  }
+  to {
+    transform: translateY(0); // Stop at position
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%); // Slide down to disappear
+  }
+}

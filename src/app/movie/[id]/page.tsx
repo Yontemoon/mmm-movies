@@ -4,6 +4,7 @@ import { fetchTMDBData } from "@/fetch/popularMovies";
 import "./page.module.scss";
 import { useQueries } from "@tanstack/react-query";
 import Loader from "@/components/loader/Loader";
+import insertMovie from "@/query/insertMovie";
 
 const MoviePage = ({ params }: { params: { id: string } }) => {
   const movieId = params.id;
@@ -24,11 +25,15 @@ const MoviePage = ({ params }: { params: { id: string } }) => {
         if (response.results) {
           return response.results;
         }
+        // TODO -- FIGURE OUT HOW TO INSERT MOVIE INTO DB WITH THIS TYPE
+        // if (!Array.isArray(response)) {
+        //   await insertMovie(response);
+        // }
         return response;
       },
     })),
   });
-  console.log(results);
+  // console.log(results);
 
   const [movieDetails, movieRecommendations] = results;
   const isLoading = results.some((result) => result.isLoading);
@@ -36,6 +41,7 @@ const MoviePage = ({ params }: { params: { id: string } }) => {
 
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data.</div>;
+  console.log(movieDetails.data);
   return <>{JSON.stringify(movieRecommendations)}</>;
 };
 

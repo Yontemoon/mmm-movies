@@ -32,16 +32,12 @@ body {
   color: $text-color;
 }
 
-// main {
-//   @include flexCenter;
-// }
-
-// @mixin setBgColorAndHover($baseColor) {
-//   background-color: $baseColor;
-//   &:hover {
-//     background-color: darken($baseColor, 5%);
-//   }
-// }
+main {
+  max-width: 72.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
 
 h1 {
   font-size: $h1-size;
