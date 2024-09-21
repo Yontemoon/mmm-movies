@@ -9,7 +9,6 @@ import { TSFavorites, TSWatchlist } from "@/types/supabase.types";
 import updateWatchlist from "@/query/updateWatchlist";
 import { isInList } from "@/utils/helper";
 import updateFavorite from "@/query/updateFavorite";
-import StarRating from "../star_rating/StarRating";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import StarIcon from "../icons/Star";
 import HeartIcon from "../icons/Heart";
