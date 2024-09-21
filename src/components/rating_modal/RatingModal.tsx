@@ -1,9 +1,9 @@
 import "./RatingModal.scss";
-import { useEffect, useRef, useState, forwardRef } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import StarRating from "../star_rating/StarRating";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import Button from "../button/Button";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMovie } from "@/types/tmdb.types";
 import { Rating } from "react-simple-star-rating";
 import { roundToWhole, toOneDecimal, toTimestamptz } from "@/utils/helper";
