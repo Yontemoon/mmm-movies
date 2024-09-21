@@ -5,7 +5,9 @@
   height: 300px;
   overflow: hidden;
   position: relative;
-  z-index: 5;
+  z-index: 1;
+  // padding: 10px;
+  box-sizing: border-box;
 
   img {
     -webkit-user-drag: none;
@@ -14,6 +16,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     pointer-events: none;
+    z-index: 5;
   }
   @include border($secondary-color);
 

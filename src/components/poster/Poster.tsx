@@ -16,6 +16,7 @@ import HeartIcon from "../icons/Heart";
 import EyeIcon from "../icons/Eye";
 import clsx from "clsx";
 import Link from "next/link";
+import RatingModal from "../rating_modal/RatingModal";
 
 type PropTypes = {
   movie: TMovie;
@@ -23,11 +24,11 @@ type PropTypes = {
 
 const Poster = ({ movie }: PropTypes) => {
   const [hovered, setHovered] = useState(false);
-  const [showStars, setShowStar] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleMouseEnter = () => setHovered(true);
   const handleMouseLeave = () => {
-    if (!showStars) setHovered(false);
+    if (!showModal) setHovered(false);
   };
 
   const wrapperRef = useRef(null);
@@ -44,9 +45,9 @@ const Poster = ({ movie }: PropTypes) => {
   )?.rating_number;
 
   useOnClickOutside(wrapperRef, () => {
-    if (showStars && hovered) {
+    if (showModal && hovered) {
       setHovered(false);
-      setShowStar(false);
+      setShowModal(false);
     }
   });
 
@@ -133,11 +134,11 @@ const Poster = ({ movie }: PropTypes) => {
           </div>
         </Link>
 
-        {(hovered || showStars) && (
+        {(hovered || showModal) && (
           <div className="hover-info">
             <div>
               <Button
-                type="icon"
+                size="icon"
                 purpose="watchlist"
                 onClick={() => watchlistMutation.mutate(movie)}
               >
@@ -150,7 +151,7 @@ const Poster = ({ movie }: PropTypes) => {
                 )}
               </Button>
               <Button
-                type="icon"
+                size="icon"
                 purpose="favorite"
                 onClick={() => favoriteMutation.mutate(movie)}
               >
@@ -163,14 +164,23 @@ const Poster = ({ movie }: PropTypes) => {
                 )}
               </Button>
               <Button
-                type="icon"
-                onClick={() => setShowStar(!showStars)}
+                size="icon"
+                onClick={() => setShowModal(!showModal)}
                 purpose="rating"
               >
                 <StarIcon />
               </Button>
-              {showStars && (
-                <StarRating startRating={currRating || 0} movie={movie} />
+              {showModal && (
+                // <StarRating startRating={currRating || 0} movie={movie} />
+                <RatingModal
+                  currentRating={currRating || 0}
+                  userMovieInfo={
+                    movies?.rating?.find((m) => m.movie_id === movie.id) || null
+                  }
+                  openModal={showModal}
+                  closeModal={() => setShowModal(false)}
+                  movie={movie}
+                />
               )}
             </div>
           </div>

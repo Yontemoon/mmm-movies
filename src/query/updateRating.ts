@@ -7,9 +7,10 @@ import { equal } from "assert";
 type PropTypes = {
   movie: TMovie;
   rating: number;
+  review: string | null;
 };
 
-const updateRating = async ({ movie, rating }: PropTypes) => {
+const updateRating = async ({ movie, rating, review }: PropTypes) => {
   try {
     const { data: authData, error: authError } = await supabase.auth.getUser();
     if (authError) throw Error(authError.message);
@@ -31,6 +32,7 @@ const updateRating = async ({ movie, rating }: PropTypes) => {
     ).upsert({
       user_id: userId,
       movie_id: movieId,
+      review: review,
       rating_number: roundToWhole(rating * 2),
       created_at: toTimestamptz(new Date()),
     }, {

@@ -15,7 +15,7 @@ type PropTypes = {
   startRating: number;
 };
 
-const StarRating = ({ startRating, movie }: PropTypes) => {
+const StarRating = ({ startRating, movie, ...props }: PropTypes) => {
   const queryClient = useQueryClient();
 
   const ratingMutation = useMutation({
@@ -67,7 +67,7 @@ const StarRating = ({ startRating, movie }: PropTypes) => {
   });
 
   return (
-    <div className="">
+    <div className="" {...props}>
       <Rating
         onClick={(rate) => ratingMutation.mutate({ movie, rating: rate })}
         allowFraction={true}

@@ -4,18 +4,23 @@ import clsx from "clsx";
 
 type PropTypes = {
   children: React.ReactNode;
-  type?: "default" | "icon";
+  size?: "default" | "icon";
   onClick?: () => void;
   className?: string;
   purpose?: "default" | "watchlist" | "rating" | "favorite";
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 };
 
 const Button = ({
   children,
   onClick,
   className,
-  type = "default",
+  size = "default",
   purpose = "default",
+  type = "button",
+  disabled = false,
+  ...props
 }: PropTypes) => {
   return (
     <button
@@ -23,11 +28,14 @@ const Button = ({
         "button-wrapper",
         josefin_sans.className,
         className,
-        type === "default" && "default-button",
-        type === "icon" && "icon-button",
+        size === "default" && "default-button",
+        size === "icon" && "icon-button",
         purpose && `${purpose}-button`
       )}
       onClick={onClick}
+      type={type}
+      disabled={disabled}
+      {...props}
     >
       {children}
     </button>

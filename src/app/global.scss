@@ -20,6 +20,9 @@ $h4-size: 1.5rem;
   border-color: $color;
   border-right: solid 5px $color;
   border-bottom: solid 5px $color;
+  // box-shadow: 10px -10px 0 -3px $color, 10px -10px $color;
+  // box-shadow: 2px 2px 0px $color, 4px 4px 0px lighten($color, 10%),
+  //   6px 6px 0px lighten($color, 20%);
 }
 
 @mixin transition {
