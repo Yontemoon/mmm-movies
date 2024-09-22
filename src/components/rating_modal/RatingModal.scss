@@ -1,3 +1,31 @@
+@import "../../app/global.scss";
+
+.modal-container {
+  min-width: 750px;
+  background-color: $primary-background-color;
+  box-sizing: border-box;
+
+  .form-container {
+    display: grid;
+
+    .modal-form-details {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .modal-buttons {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+  }
+}
+
 .modal-container::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
 }

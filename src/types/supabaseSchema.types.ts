@@ -90,6 +90,7 @@ export type Database = {
       ratings: {
         Row: {
           created_at: string
+          date_watched: string
           id: number
           movie_id: number
           rating_number: number
@@ -98,6 +99,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          date_watched?: string
           id?: number
           movie_id: number
           rating_number: number
@@ -106,6 +108,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          date_watched?: string
           id?: number
           movie_id?: number
           rating_number?: number

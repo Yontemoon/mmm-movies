@@ -1,0 +1,33 @@
+@import "@/app/global.scss";
+
+$star-fill-color: #333;
+$star-empty-color: #f0f0f0;
+
+.star-rating-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.star-rating-label {
+  font-size: 1rem;
+  color: $text-color;
+  text-transform: uppercase;
+}
+
+.star-rating {
+  display: inline-flex;
+  cursor: pointer;
+
+  svg {
+    // empty-cells: $star-empty-color;
+    // fill: $fourth-color;
+    transition: fill 0.3s ease;
+  }
+
+  //   svg:hover,
+  //   svg:active {
+  //     fill: darken($fourth-color, 10%);
+  //   }
+}

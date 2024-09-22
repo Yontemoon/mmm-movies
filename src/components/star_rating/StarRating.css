@@ -1,0 +1,25 @@
+@import url("@/app/global.scss");
+.star-rating-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.star-rating-label {
+  font-size: 1rem;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.star-rating {
+  display: inline-flex;
+  cursor: pointer;
+}
+.star-rating svg {
+  transition: fill 0.3s ease;
+}
+.star-rating svg:hover,
+.star-rating svg:active {
+  fill: #1a1a1a;
+}/*# sourceMappingURL=StarRating.css.map */

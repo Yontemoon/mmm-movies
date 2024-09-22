@@ -1,0 +1,68 @@
+body {
+  background-color: rgb(30, 30, 36);
+  color: rgb(242, 239, 233);
+}
+
+main {
+  max-width: 72.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: rgb(242, 239, 233);
+}
+
+h2 {
+  font-size: 1rem;
+  color: rgb(242, 239, 233);
+}
+
+h3 {
+  font-size: 1.75rem;
+  color: rgb(242, 239, 233);
+}
+
+h4 {
+  font-size: 1.5rem;
+  color: rgb(242, 239, 233);
+}
+
+.date-input-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.date-input-label {
+  font-size: 1rem;
+  color: rgb(242, 239, 233);
+  text-transform: uppercase;
+}
+
+.date-input {
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+  border: 2px solid #333;
+  color: #111;
+  font-size: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  box-shadow: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.date-input:hover {
+  background-color: #e0e0e0;
+  border-color: #333;
+}
+.date-input:focus {
+  outline: none;
+  border-color: #333;
+}/*# sourceMappingURL=DateInput.css.map */

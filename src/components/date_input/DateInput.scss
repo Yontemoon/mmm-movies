@@ -1,0 +1,45 @@
+@import "../../app/global.scss";
+
+$date-bg-color: #f0f0f0;
+$date-border-color: #333;
+$date-text-color: #111;
+$date-hover-bg-color: #e0e0e0;
+
+.date-input-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  //   gap: 0.5rem;
+}
+
+.date-input-label {
+  //   font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+  color: $text-color;
+  text-transform: uppercase;
+}
+
+.date-input {
+  box-sizing: border-box;
+  background-color: $date-bg-color;
+  border: 2px solid $date-border-color;
+  color: $date-text-color;
+  font-size: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  box-shadow: none;
+  appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    background-color: $date-hover-bg-color;
+    border-color: $date-border-color;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $date-border-color;
+  }
+}

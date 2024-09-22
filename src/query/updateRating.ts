@@ -8,9 +8,12 @@ type PropTypes = {
   movie: TMovie;
   rating: number;
   review: string | null;
+  dateWatched: string;
 };
 
-const updateRating = async ({ movie, rating, review }: PropTypes) => {
+const updateRating = async (
+  { movie, rating, review, dateWatched }: PropTypes,
+) => {
   try {
     const { data: authData, error: authError } = await supabase.auth.getUser();
     if (authError) throw Error(authError.message);
@@ -35,6 +38,7 @@ const updateRating = async ({ movie, rating, review }: PropTypes) => {
       review: review,
       rating_number: roundToWhole(rating * 2),
       created_at: toTimestamptz(new Date()),
+      date_watched: dateWatched,
     }, {
       onConflict: "user_id, movie_id",
     })

@@ -6,14 +6,20 @@ import Button from "../button/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMovie } from "@/types/tmdb.types";
 import { Rating } from "react-simple-star-rating";
-import { roundToWhole, toOneDecimal, toTimestamptz } from "@/utils/helper";
+import {
+  roundToWhole,
+  toOneDecimal,
+  toTimestamptz,
+  getTodaysDate,
+} from "@/utils/helper";
 import updateRating from "@/query/updateRating";
 import { TSRating } from "@/types/supabase.types";
+import DateInput from "../date_input/DateInput";
+import StarRating from "../star_rating/StarRating";
 
 type Proptypes = {
   openModal: boolean;
-  closeModal: (value: boolean) => void;
-  currentRating: number;
+  closeModal: () => void;
   movie: TMovie;
   userMovieInfo: TSRating | null;
 };
@@ -21,12 +27,12 @@ type Proptypes = {
 type FormData = {
   rating: number;
   review: string | null;
+  date_watched: string;
 };
 
 const RatingModal = ({
   openModal,
   closeModal,
-  currentRating,
   movie,
   userMovieInfo,
 }: Proptypes) => {
@@ -34,14 +40,38 @@ const RatingModal = ({
 
   const queryClient = useQueryClient();
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+  } = useForm<FormData>();
+
+  const [rating, setRating] = useState(
+    userMovieInfo?.rating_number &&
+      toOneDecimal(userMovieInfo.rating_number / 2)
+  );
+  const [date, setDate] = useState(
+    userMovieInfo?.date_watched || getTodaysDate()
+  );
+  const defaultReview = userMovieInfo?.review || null;
+
+  useEffect(() => {
+    if (openModal) {
+      ref.current?.showModal();
+    } else {
+      ref.current?.close();
+    }
+  }, [openModal]);
+
   const ratingMutation = useMutation({
     mutationFn: updateRating,
-    onMutate: async ({ movie, rating, review }) => {
+    onMutate: async ({ movie, rating, review, dateWatched }) => {
       await queryClient.cancelQueries({ queryKey: ["rating"] });
       const prevRating = queryClient.getQueryData(["rating"]);
       const movieId = movie.id;
       queryClient.setQueryData(["rating"], (oldRating) => {
-        console.log(oldRating);
         if (Array.isArray(oldRating)) {
           const isMovieInRating = oldRating?.some(
             (m) => m.movie_id === movieId
@@ -55,6 +85,7 @@ const RatingModal = ({
                     rating_number: roundToWhole(rating * 2),
                     created_at: toTimestamptz(new Date()),
                     review: review,
+                    date_watched: dateWatched,
                   }
                 : m
             );
@@ -66,6 +97,7 @@ const RatingModal = ({
                 rating_number: roundToWhole(rating * 2),
                 created_at: toTimestamptz(new Date()),
                 review: review,
+                date_watched: dateWatched,
               },
             ];
           }
@@ -81,61 +113,47 @@ const RatingModal = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["rating"] });
-      handleClose();
+      closeModal();
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    setValue,
-  } = useForm<FormData>();
-
-  const [rating, setRating] = useState(currentRating);
-  console.log(userMovieInfo);
-  const defaultReview = userMovieInfo?.review || null;
-  console.log(defaultReview);
-  useEffect(() => {
-    if (openModal) {
-      ref.current?.showModal();
-    } else {
-      ref.current?.close();
-    }
-  }, [openModal]);
-
-  const handleClose = () => {
-    closeModal(false);
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+    const movieRating = data.rating;
+    const dateWatched = data.date_watched;
+    const movieReview = data.review;
+    ratingMutation.mutate({
+      movie,
+      rating: movieRating,
+      review: movieReview,
+      dateWatched: dateWatched,
+    });
   };
 
-  const onSubmit = (data: FormData) => {
-    const movieRating = data.rating;
-    const movieReview = data.review;
-    ratingMutation.mutate({ movie, rating: movieRating, review: movieReview });
+  const handleDateChange = (date: string) => {
+    setValue("date_watched", date);
+    setDate(date);
+  };
+
+  const handleRatingChange = (rating: number) => {
+    setValue("rating", rating);
+    setRating(rating);
   };
 
   return (
-    <dialog ref={ref} onClose={handleClose} className="modal-container">
-      <h1>{currentRating}</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Rating
-          allowFraction={true}
-          size={30}
-          onClick={(rate) => {
-            const displayedRating = toOneDecimal(rating / 2);
-
-            setRating(displayedRating);
-            setValue("rating", rate);
-          }}
-          initialValue={toOneDecimal(rating / 2)}
-        />
-
+    <dialog ref={ref} onClose={closeModal} className="modal-container">
+      <h1>{movie.title}</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="form-container">
+        <div className="modal-form-details">
+          <StarRating onChange={handleRatingChange} initialRating={rating} />
+          <DateInput date={date} onChange={handleDateChange} />
+        </div>
         <textarea
           {...register("review")}
           defaultValue={defaultReview || undefined}
+          rows={8}
         />
-        <div>
+        <div className="modal-buttons">
           <Button type="submit" disabled={ratingMutation.isPending}>
             {!ratingMutation.isPending
               ? ratingMutation.isSuccess
@@ -143,7 +161,7 @@ const RatingModal = ({
                 : "Submit"
               : "Submitting..."}
           </Button>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={closeModal}>Close</Button>
         </div>
       </form>
     </dialog>

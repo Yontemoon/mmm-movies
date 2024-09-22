@@ -121,6 +121,14 @@ const Poster = ({ movie }: PropTypes) => {
         onMouseLeave={handleMouseLeave}
         ref={wrapperRef}
       >
+        <RatingModal
+          userMovieInfo={
+            movies?.rating?.find((m) => m.movie_id === movie.id) || null
+          }
+          openModal={showModal}
+          closeModal={() => setShowModal(false)}
+          movie={movie}
+        />
         <Link href={`/movie/${movie.id}`}>
           <div>
             <Image
@@ -169,18 +177,6 @@ const Poster = ({ movie }: PropTypes) => {
               >
                 <StarIcon />
               </Button>
-              {showModal && (
-                // <StarRating startRating={currRating || 0} movie={movie} />
-                <RatingModal
-                  currentRating={currRating || 0}
-                  userMovieInfo={
-                    movies?.rating?.find((m) => m.movie_id === movie.id) || null
-                  }
-                  openModal={showModal}
-                  closeModal={() => setShowModal(false)}
-                  movie={movie}
-                />
-              )}
             </div>
           </div>
         )}

@@ -1,3 +1,57 @@
+body {
+  background-color: rgb(30, 30, 36);
+  color: rgb(242, 239, 233);
+}
+
+main {
+  max-width: 72.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: rgb(242, 239, 233);
+}
+
+h2 {
+  font-size: 1rem;
+  color: rgb(242, 239, 233);
+}
+
+h3 {
+  font-size: 1.75rem;
+  color: rgb(242, 239, 233);
+}
+
+h4 {
+  font-size: 1.5rem;
+  color: rgb(242, 239, 233);
+}
+
+.modal-container {
+  min-width: 750px;
+  background-color: rgb(30, 30, 36);
+  box-sizing: border-box;
+}
+.modal-container .form-container {
+  display: grid;
+}
+.modal-container .form-container .modal-form-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.modal-container .form-container textarea {
+  resize: vertical;
+}
+.modal-container .form-container .modal-buttons {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
 .modal-container::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
 }/*# sourceMappingURL=RatingModal.css.map */
