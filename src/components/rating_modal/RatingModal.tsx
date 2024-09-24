@@ -1,11 +1,9 @@
 import "./RatingModal.scss";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import Button from "../button/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMovie } from "@/types/tmdb.types";
-import { Rating } from "react-simple-star-rating";
 import {
   roundToWhole,
   toOneDecimal,
@@ -46,16 +44,26 @@ const RatingModal = ({
     watch,
     formState: { errors },
     setValue,
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: {
+      rating:
+        (userMovieInfo?.rating_number &&
+          toOneDecimal(userMovieInfo.rating_number / 2)) ||
+        0,
+      review: userMovieInfo?.review || "",
+      date_watched: userMovieInfo?.date_watched || getTodaysDate(),
+    },
+  });
 
-  const [rating, setRating] = useState(
-    userMovieInfo?.rating_number &&
-      toOneDecimal(userMovieInfo.rating_number / 2)
-  );
-  const [date, setDate] = useState(
-    userMovieInfo?.date_watched || getTodaysDate()
-  );
-  const defaultReview = userMovieInfo?.review || null;
+  // const [rating, setRating] = useState(
+  //   userMovieInfo?.rating_number &&
+  //     toOneDecimal(userMovieInfo.rating_number / 2 || 0)
+  // );
+  // const [date, setDate] = useState(
+  //   userMovieInfo?.date_watched || getTodaysDate()
+  // );
+  // console.log(date);
+  // const defaultReview = userMovieInfo?.review || null;
 
   useEffect(() => {
     if (openModal) {
@@ -132,25 +140,53 @@ const RatingModal = ({
 
   const handleDateChange = (date: string) => {
     setValue("date_watched", date);
-    setDate(date);
+    // setDate(date);
   };
 
   const handleRatingChange = (rating: number) => {
     setValue("rating", rating);
-    setRating(rating);
+    // setRating(rating);
   };
+
+  // const handleCloseModal = () => {
+  //   const previousRating =
+  //     (userMovieInfo?.rating_number &&
+  //       toOneDecimal(userMovieInfo?.rating_number / 2)) ||
+  //     0;
+
+  //   const previousDateWatched = userMovieInfo?.date_watched || getTodaysDate();
+  //   console.log(previousDateWatched);
+
+  //   if (previousRating !== rating) {
+  //     setRating(previousRating);
+  //   }
+
+  //   if (previousDateWatched !== date) {
+  //     setDate(previousDateWatched);
+  //   }
+  //   closeModal();
+  // };
 
   return (
     <dialog ref={ref} onClose={closeModal} className="modal-container">
       <h1>{movie.title}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="form-container">
         <div className="modal-form-details">
-          <StarRating onChange={handleRatingChange} initialRating={rating} />
-          <DateInput date={date} onChange={handleDateChange} />
+          <StarRating
+            {...register("rating", { required: true })}
+            onChange={(rating) => setValue("rating", rating)}
+            initialRating={watch("rating")}
+          />
+          <DateInput
+            {...register("date_watched")}
+            date={watch("date_watched")}
+            onChange={(date) => setValue("date_watched", date)}
+            label="Date Watched"
+          />
         </div>
         <textarea
           {...register("review")}
-          defaultValue={defaultReview || undefined}
+          defaultValue={watch("review") || ""}
           rows={8}
         />
         <div className="modal-buttons">

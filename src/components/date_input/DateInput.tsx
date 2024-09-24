@@ -9,7 +9,7 @@ type PropTypes = {
 
 const DateInput = ({
   label = "Select Date",
-  date,
+  // date,
   // setDate,
   onChange,
   ...props
@@ -26,7 +26,7 @@ const DateInput = ({
         id="date-input"
         className="date-input"
         // value={date}
-        defaultValue={date}
+        // defaultValue={date}
         onChange={(e) => onChange(e.target.value)}
         {...props}
       />

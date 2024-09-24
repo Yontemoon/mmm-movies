@@ -20,12 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <ReactQueryProvider>
         <UserMoviesProvider>
-          <ToastProvider>
-            <body className={josefin_sans.className}>
+          <body className={josefin_sans.className}>
+            <ToastProvider>
               <Header />
               <main>{children}</main>
-            </body>
-          </ToastProvider>
+            </ToastProvider>
+          </body>
         </UserMoviesProvider>
       </ReactQueryProvider>
     </html>

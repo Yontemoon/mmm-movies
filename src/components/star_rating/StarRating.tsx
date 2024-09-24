@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import "./StarRating.scss";
 import { toOneDecimal } from "@/utils/helper";
@@ -13,6 +12,7 @@ const StarRating = ({
   label = "Star Rating",
   initialRating,
   onChange,
+  ...props
 }: PropTypes) => {
   return (
     <div className="star-rating-container">
@@ -26,6 +26,7 @@ const StarRating = ({
         emptyColor="#cccccc"
         className="star-rating"
         allowFraction={true}
+        {...props}
       />
     </div>
   );
