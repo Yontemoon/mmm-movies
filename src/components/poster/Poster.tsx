@@ -129,8 +129,8 @@ const Poster = ({ movie }: PropTypes) => {
           closeModal={() => setShowModal(false)}
           movie={movie}
         />
-        <Link href={`/movie/${movie.id}`}>
-          <div>
+        <div>
+          <Link href={`/movie/${movie.id}`}>
             <Image
               unselectable="on"
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -138,8 +138,8 @@ const Poster = ({ movie }: PropTypes) => {
               width={200}
               height={300}
             />
-          </div>
-        </Link>
+          </Link>
+        </div>
 
         {(hovered || showModal) && (
           <div className="hover-info">

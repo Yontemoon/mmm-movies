@@ -30,7 +30,7 @@ const Popular = () => {
   const isLoading = results.some((result) => result.isLoading);
   const isError = results.some((result) => result.isError);
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
   if (isError) return <div>Error loading data.</div>;
 
   const handleToast = () => {
@@ -39,13 +39,19 @@ const Popular = () => {
 
   return (
     <section className={styles.popular_wrapper}>
-      <button onClick={handleToast}>click me</button>
-      <h1>Popular</h1>
-      <CarouselComp movies={popular.data} />
-      <h1>Upcoming</h1>
-      <CarouselComp movies={upcoming.data} />
-      <h1>Top Rated</h1>
-      <CarouselComp movies={topRated.data} />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <button onClick={handleToast}>click me</button>
+          <h1>Popular</h1>
+          <CarouselComp movies={popular.data} />
+          <h1>Upcoming</h1>
+          <CarouselComp movies={upcoming.data} />
+          <h1>Top Rated</h1>
+          <CarouselComp movies={topRated.data} />
+        </>
+      )}
     </section>
   );
 };
