@@ -1,0 +1,5 @@
+.popular-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}/*# sourceMappingURL=page.modules.css.map */

@@ -1,0 +1,7 @@
+// @import "@/app/global.scss";
+
+.popular-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}

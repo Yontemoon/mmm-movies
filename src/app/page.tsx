@@ -1,4 +1,4 @@
-import "./page.module.scss";
+import "./page.modules.scss";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import Popular from "./Popular";

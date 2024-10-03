@@ -1,12 +1,14 @@
 "use client";
-
+import "./page.modules.scss";
 import { TMovie } from "@/types/tmdb.types";
-import styles from "./page.module.scss";
+import styles from "./page.modules.scss";
 import { useQueries } from "@tanstack/react-query";
 import { fetchTMDBData } from "../fetch/popularMovies";
 import CarouselComp from "@/components/carousel/Carousel";
 import Loader from "@/components/loader/Loader";
 import { useToast } from "@/context/toast/ToastProvider";
+import Poster from "@/components/poster/Poster";
+import Card from "@/components/card/Card";
 
 const movieQueries = [
   { key: "popularMovies", endpoint: "/movie/popular" },
@@ -45,11 +47,39 @@ const Popular = () => {
         <>
           <button onClick={handleToast}>click me</button>
           <h1>Popular</h1>
-          <CarouselComp movies={popular.data} />
+          <Card>
+            <div className="popular-wrapper">
+              {popular.data &&
+                popular.data.map((movie) => (
+                  <div key={movie.id}>
+                    <Poster movie={movie} />
+                  </div>
+                ))}
+            </div>
+          </Card>
+
           <h1>Upcoming</h1>
-          <CarouselComp movies={upcoming.data} />
+          <Card>
+            <div className="popular-wrapper">
+              {upcoming.data &&
+                upcoming.data.map((movie) => (
+                  <div key={movie.id}>
+                    <Poster movie={movie} />
+                  </div>
+                ))}
+            </div>
+          </Card>
           <h1>Top Rated</h1>
-          <CarouselComp movies={topRated.data} />
+          <Card>
+            <div className="popular-wrapper">
+              {topRated.data &&
+                topRated.data.map((movie) => (
+                  <div key={movie.id}>
+                    <Poster movie={movie} />
+                  </div>
+                ))}
+            </div>
+          </Card>
         </>
       )}
     </section>

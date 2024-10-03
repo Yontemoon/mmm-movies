@@ -42,7 +42,6 @@ const RatingModal = ({
     handleSubmit,
     watch,
     formState: { errors },
-    setValue,
     reset,
   } = useForm<FormData>({
     defaultValues: {
@@ -55,11 +54,11 @@ const RatingModal = ({
   useEffect(() => {
     if (userMovieInfo) {
       reset({
-        rating: userMovieInfo?.rating_number
-          ? toOneDecimal(userMovieInfo.rating_number / 2)
-          : 0,
-        review: userMovieInfo?.review || "",
-        date_watched: userMovieInfo?.date_watched || getTodaysDate(),
+        rating:
+          userMovieInfo?.rating_number &&
+          toOneDecimal(userMovieInfo.rating_number / 2),
+        review: userMovieInfo?.review,
+        date_watched: userMovieInfo?.date_watched,
       });
     }
   }, [userMovieInfo, reset]);
@@ -125,7 +124,6 @@ const RatingModal = ({
   });
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
     const movieRating = data.rating;
     const dateWatched = data.date_watched;
     const movieReview = data.review;
@@ -171,7 +169,7 @@ const RatingModal = ({
         </div>
         <textarea
           {...register("review")}
-          defaultValue={watch("review") || ""}
+          // defaultValue={watch("review") || ""}
           rows={8}
         />
         <div className="modal-buttons">
